@@ -10,12 +10,13 @@
     <div class="container">
         <h2>Login</h2>
         <form id="loginForm">
-            <input type="email" id="loginEmail" placeholder="E-mail" required>
-            <input type="password" id="loginSenha" placeholder="Senha" required>
+            <input type="email" id="email" placeholder="E-mail" required>
+            <input type="password" id="senha" placeholder="Senha" required>
             <button type="submit">Entrar</button>
         </form>
+        <p>Esqueceu a senha? <a href="forgot-password.html">Clique aqui</a></p>
         <p>Não tem uma conta? <a href="index.html">Cadastre-se</a></p>
-        <p><a href="forgot-password.html">Esqueceu a sua senha?</a></p>
+        <p id="erroMensagem" style="color: red; display: none;">E-mail ou senha incorretos!</p>
     </div>
     <script src="script.js"></script>
 </body>

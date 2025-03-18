@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const nodemailer = require("../nodemailerConfig");
+const db = require("../config/db");
 
 exports.register = (req, res) => {
     const { nome, email, senha } = req.body;
@@ -17,20 +18,25 @@ exports.register = (req, res) => {
 exports.login = (req, res) => {
     const { email, senha } = req.body;
 
+    // Verificar se o usuário existe no banco de dados
     User.findByEmail(email, (err, row) => {
-        if (!row) return res.status(400).json({ msg: "E-mail não encontrado" });
+        if (!row) {
+            // Se o e-mail não existir no banco, retornar erro
+            return res.status(400).json({ success: false, msg: "E-mail ou senha incorretos!" });
+        }
 
-        bcrypt.compare(senha, row.senha, (err, isMatch) => {
-            if (!isMatch) return res.status(400).json({ msg: "Senha incorreta" });
-            res.json({ msg: "Login bem-sucedido" });
+        // Comparar a senha fornecida com a senha armazenada no banco
+        bcrypt.compare(senha, row.senha, (err, result) => {
+            if (err || !result) {
+                // Se as senhas não coincidirem, retornar erro
+                return res.status(400).json({ success: false, msg: "E-mail ou senha incorretos!" });
+            }
+
+            // Se tudo estiver certo, retornar sucesso
+            res.json({ success: true, msg: "Login realizado com sucesso!" });
         });
     });
 };
-
-const bcrypt = require("bcryptjs");
-const User = require("../models/User");
-const nodemailer = require("../nodemailerConfig");
-const db = require("../config/db");
 
 // Função para enviar o código de recuperação de senha
 exports.sendResetPasswordCode = (req, res) => {

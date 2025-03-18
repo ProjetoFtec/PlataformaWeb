@@ -49,12 +49,13 @@ document.getElementById("toggleSenha").addEventListener("click", function() {
     confirmSenhaInput.type = tipo;
 });
 
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById('loginEmail').value;
-    const senha = document.getElementById('loginSenha').value;
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
 
+    // Enviar a requisição para o backend
     const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -62,11 +63,13 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     });
 
     const data = await response.json();
-    if (data.msg) {
-        alert(data.msg);
+
+    if (data.success) {
+        // Se o login for bem-sucedido, redireciona para o dashboard em uma nova aba
+        window.open("dashboard.html", "_blank");
     } else {
-        alert('Login bem-sucedido');
-        // Aqui você pode redirecionar para o dashboard ou outra página.
+        // Caso contrário, exibe a mensagem de erro
+        document.getElementById("erroMensagem").style.display = "block";
     }
 });
 
@@ -112,6 +115,9 @@ document.getElementById("verifyCodeForm").addEventListener("submit", async (e) =
         // Esconde a seção do código e mostra a seção para nova senha
         document.getElementById("codeSection").style.display = "none";
         document.getElementById("resetPasswordSection").style.display = "block";
+
+        // Quando o código for validado, abrir a nova aba para atualizar a senha
+        window.open("update-password.html", "_blank");
     }
 });
 
